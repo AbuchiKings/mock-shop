@@ -25,6 +25,8 @@
     "prettier": "^1.18.2"
   },
   "scripts": {
+    "build": "rm -rf ./dist/* && babel ./server --out-dir ./dist --ignore ./server/test",
+    "migrations": "babel-node ./server/config/db.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
