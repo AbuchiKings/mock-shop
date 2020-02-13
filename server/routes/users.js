@@ -13,22 +13,21 @@ router.post('/auth/signup',
 );
 
 router.post('/auth/login',
-   // validator.validateLogin,
-   // validator.validationHandler,
+    // validator.validateLogin,
+    // validator.validationHandler,
     UserController.login
 );
 
-router.get('/users/:id',
-   // auth.verifyToken,
-   // validator.validateId,
-   // validator.validationHandler,
-    UserController.getUserById
-);
 
-router.patch('/users/update-password',
-    // auth.verifyToken,
+router.patch('/users/update-password/:id',
+    auth.verifyToken,
     // validator.validatePasswordUpdate,
     // validator.validationHandler,
     UserController.updatePassword
+);
+
+router.delete('/users/delete/:id',
+    auth.verifyToken,
+    UserController.deleteUser
 );
 export default router;

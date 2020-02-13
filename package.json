@@ -27,7 +27,8 @@
   "scripts": {
     "lint": "eslint ./server",
     "build": "rm -rf ./dist/* && babel ./server --out-dir ./dist --ignore ./server/test",
-    "migrations": "babel-node ./server/config/db.js",
+    "connection": "babel-node ./server/config/db.js --env",
+    "start:dev": "nodemon --exec babel-node ./server/index.js --env",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

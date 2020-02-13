@@ -1,16 +1,16 @@
 const queries = {
 
-  regUser(firstName, lastName, email, hashpassword, isAdmin) {
+  regUser(firstName, lastName, email, hashedpassword, isAdmin) {
     return ({
       text: `INSERT INTO users (first_name, last_name, 
                 email, password, is_admin)
-                VALUES($1, $2, $3, $4, $5,) RETURNING *`,
+                VALUES($1, $2, $3, $4, $5) RETURNING *`,
 
       values: [
         firstName,
         lastName,
         email,
-        hashpassword,
+        hashedpassword,
         isAdmin
       ]
     });
@@ -38,18 +38,26 @@ const queries = {
     });
   },
 
+  deleteUser(userId) {
+    return ({
+      text: `DELETE FROM users WHERE id = $1 RETURNING *`,
+      values: [userId]
+    })
+  },
+
   createProduct(product) {
     return ({
       text: `INSERT INTO products 
-              (name, description, category, price, image_url) 
+              (name, description, category, price, image_url, in_stock) 
               VALUES 
-              ($1,$2,$3,$4,$5) RETURNING *`,
+              ($1, $2, $3, $4, $5, $6) RETURNING *`,
       values: [
         product.name,
         product.description,
         product.category,
         product.price,
-        product.imageUrl
+        product.imageUrl,
+        inStock
       ]
     });
   },
@@ -91,7 +99,7 @@ const queries = {
 
   deleteProduct(id) {
     return ({
-      text: 'DELETE FROM products WHERE product_id = $1',
+      text: 'DELETE FROM products WHERE product_id = $1 RETURNING *',
       values: [id]
     });
   },
@@ -118,10 +126,10 @@ const queries = {
     });
   },
 
-  getCart(cartId) {
+  getCart(cartId, userId) {
     return ({
-      text: 'SELECT * FROM carts WHERE id = $1',
-      values: [cartId]
+      text: 'SELECT * FROM carts WHERE id = $1 and user_id = $2',
+      values: [cartId, userId]
     });
   },
 
