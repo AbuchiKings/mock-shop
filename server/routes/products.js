@@ -22,6 +22,10 @@ router.get('/products',
     auth.verifyToken,
     ProductController.getAllProducts
 );
+router.get('/products/:id',
+    //auth.verifyToken,
+    ProductController.getProduct
+);
 
 // router.delete(
 //     '/products/delete'
