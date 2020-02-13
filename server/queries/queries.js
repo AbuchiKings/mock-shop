@@ -57,7 +57,7 @@ const queries = {
         product.category,
         product.price,
         product.imageUrl,
-        inStock
+        product.inStock
       ]
     });
   },

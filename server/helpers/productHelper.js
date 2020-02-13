@@ -9,17 +9,17 @@ class ProductHelper {
             let { price, inStock } = req.body;
             price = parseFloat(price, 10).toFixed(2);
 
-            inStock = inStock ? inStock : true;
+            inStock = inStock === undefined ? true : inStock;
 
             const allProducts = await pool.query(query.getAllProducts());
-            const isExists = allProducts.rows.some(product => product.product_name === newProduct.name);
+            const isExists = allProducts.rows.some(product => product.name === req.body.name);
 
             if (isExists) {
                 errorHandler(409, 'The provided product name already exists.');
             }
 
             let product = { ...req.body, price, inStock };
-            createdProduct = await pool.query(query.createProduct(product));
+            let createdProduct = await pool.query(query.createProduct(product));
             return createdProduct.rows[0];
         } catch (error) {
             return error;

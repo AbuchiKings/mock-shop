@@ -2,10 +2,13 @@ import { Router } from 'express';
 //import ProductController from '../controller/ProductController';
 import validator from '../middleware/validations';
 import auth from '../middleware/Auth';
+import ProductController from './../controller/productController';
 
 const router = Router();
 
 router.post('/products',
+auth.verifyToken,
+auth.verifyAdmin,
 ProductController.createProduct
 );
 
@@ -23,4 +26,4 @@ ProductController.createProduct
 //    // ProductController.
 // );
 
-export default router;
+export default router; 
