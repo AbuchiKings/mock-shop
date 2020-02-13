@@ -18,14 +18,14 @@ const queries = {
 
   getUserByEmail(email) {
     return ({
-      text: 'SELECT * FROM users WHERE email = $1',
+      text: `SELECT * FROM users WHERE email = $1`,
       values: [email]
     });
   },
 
   getUserById(id) {
     return ({
-      text: 'SELECT * FROM users WHERE id = $1',
+      text: `SELECT * FROM users WHERE id = $1`,
       values: [id]
     });
   },
@@ -69,7 +69,7 @@ const queries = {
             description = COALESCE($2, description),
             category = COALESCE($3, category),
             price = COALESCE($4, price),
-            image_url = COALESCE($5, name)
+            image_url = COALESCE($5, image_url)
             WHERE product_id = $6
             RETURNING *`,
       values: [
@@ -85,14 +85,14 @@ const queries = {
 
   getProduct(id) {
     return ({
-      text: 'SELECT * FROM products WHERE product_id = $1',
+      text: `SELECT * FROM products WHERE product_id = $1`,
       values: [id]
     });
   },
 
   getAllProducts() {
     return ({
-      text: 'SELECT * FROM products',
+      text: `SELECT * FROM products`,
       values: []
     });
   },

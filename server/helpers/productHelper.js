@@ -30,20 +30,20 @@ class ProductHelper {
     static async updateProduct(req) {
         try {
             let id = req.params.id;
-            let price = req.body;
+            let price = req.body.price;
 
             if (price) {
                 price = parseFloat(price, 10).toFixed(2);
             }
 
-            let productData = { ...req.body, price }
+            let product = { ...req.body, price }
 
             id = parseInt(id, 10);
-            const product = await pool.query(query.getUserById(id));
-            if (product.rowCount < 1) {
+            const productData = await pool.query(query.getProduct(id));
+            if (productData.rowCount < 1) {
                 errorHandler(404, 'Product not found');
             }
-            let updatedProduct = pool.query(query.updateProduct(id, productData));
+            let updatedProduct = await pool.query(query.updateProduct(id, product));
             return updatedProduct.rows[0];
         } catch (error) {
             return error;
