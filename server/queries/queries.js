@@ -99,7 +99,7 @@ const queries = {
 
   deleteProduct(id) {
     return ({
-      text: 'DELETE FROM products WHERE product_id = $1 RETURNING *',
+      text: `DELETE FROM products WHERE product_id = $1 RETURNING *`,
       values: [id]
     });
   },

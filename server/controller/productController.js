@@ -22,9 +22,9 @@ class ProductController {
         responseHandler(res, result, next, 200, 'Product updated successfully');
     }
 
-    static async deleteUser(req, res, next) {
-        const result = await UserHelper.deleteUser(req);
-        responseHandler(res, result, next, 200, 'User deleted successfully');
+    static async deleteProduct(req, res, next) {
+        const result = await ProductHelper.deleteProduct(req);
+        responseHandler(res, result, next, 200, 'Product deleted successfully');
     }
 }
 

@@ -26,7 +26,7 @@ router.patch('/users/update-password/:id',
     UserController.updatePassword
 );
 
-router.delete('/users/delete/:id',
+router.delete('/users/:id',
     auth.verifyToken,
     UserController.deleteUser
 );

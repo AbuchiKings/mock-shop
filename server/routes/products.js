@@ -1,5 +1,4 @@
 import { Router } from 'express';
-//import ProductController from '../controller/ProductController';
 import validator from '../middleware/validations';
 import auth from '../middleware/Auth';
 import ProductController from './../controller/productController';
@@ -23,13 +22,14 @@ router.get('/products',
     ProductController.getAllProducts
 );
 router.get('/products/:id',
-    //auth.verifyToken,
+    auth.verifyToken,
     ProductController.getProduct
 );
 
-// router.delete(
-//     '/products/delete'
-//    // ProductController.
-// );
+router.delete('/products/:id',
+    auth.verifyToken,
+    auth.verifyAdmin,
+    ProductController.deleteProduct
+);
 
 export default router; 

@@ -81,8 +81,8 @@ class ProductHelper {
             const product = await pool.query(query.getProduct(id));
             if (product.rowCount < 1) errorHandler(404, 'Product not found');
             let deletedProduct = await pool.query(query.deleteProduct(id));
-            if (deletedProduct.rowCount < 1) throw new Error('There was a problem deleting product');
-            return [];
+            if (deletedProduct.rowCount < 1) errorHandler(500, 'There was a problem deleting product');
+            return deletedProduct.rows[0];
         } catch (error) {
             return error;
         }
