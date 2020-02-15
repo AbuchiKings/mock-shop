@@ -1,11 +1,10 @@
 import 'core-js/stable';
 import 'regenerator-runtime';
-import errorHandler from './handleError';
 import pool from './pool';
 import query from '../queries/queries';
 
 
-export async function updateCart(products, userId, ) {
+export async function updateCart(products, userId) {
     try {
         let newCartProducts = [], product;
 
@@ -13,10 +12,9 @@ export async function updateCart(products, userId, ) {
             let id = parseInt(product_id, 10);
             product = await pool.query(query.getProduct(id));
 
-            if (product.rowCount > 0 && product.rows[0].in_stock) {
-
-                newCartProducts.push(product_id)
-                return product.rows[0]
+            if (product.rowCount > 0 && product.rows[0].in_stock === true) {
+                newCartProducts.push(product_id);
+                return product.rows[0];
             }
 
         });
@@ -29,3 +27,4 @@ export async function updateCart(products, userId, ) {
         return error;
     }
 }
+

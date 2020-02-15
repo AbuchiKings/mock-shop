@@ -7,6 +7,11 @@ class CartController{
         const result = await CartHelper.addToCart(req, res, next);
         responseHandler(res, result, next, 201, 'Product added to cart');
     }
+
+    static async getCart(req, res, next){
+        const result = await CartHelper.getCart(req);
+        responseHandler(res, result, next, 200, 'Success')
+    }
 }
 
 export default CartController;

@@ -6,14 +6,14 @@ import CartController from '../controller/cartController';
 const router = Router();
 
 router.put('/carts',
-    //auth.verifyToken,
+    auth.verifyToken,
     CartController.addToCart
 );
-// router.put('/carts',
-//    // auth.verifyToken,
-//     //auth.verifyAdmin,
-//     CartController.createCart
-// );
+
+router.get('/carts',
+    auth.verifyToken,
+    CartController.getCart
+);
 // router.put('/carts',
 //    // auth.verifyToken,
 //     //auth.verifyAdmin,

@@ -122,14 +122,14 @@ const queries = {
 
   getUserCart(userId) {
     return ({
-      text: 'SELECT * FROM carts WHERE user_id = $1',
+      text: `SELECT * FROM carts WHERE user_id = $1`,
       values: [userId]
     });
   },
 
   getAllProductsInCarts(userId) {
     return ({
-      text: 'SELECT product_id FROM carts WHERE user_id = $1',
+      text: `SELECT products_id FROM carts WHERE user_id = $1`,
       values: [userId]
     });
   },
