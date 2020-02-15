@@ -34,7 +34,7 @@ const queries = {
     return ({
       text: `UPDATE users SET
             password = COALESCE($1, password) WHERE id = $2 RETURNING *`,
-      values: [hashNewPassword, userId]
+  values: [hashNewPassword, userId]
     });
   },
 
@@ -104,15 +104,23 @@ const queries = {
     });
   },
 
-  addCart(productId, userId) {
+  createCart(userId) {
     return ({
-      text: `INSERT INTO carts (product_id, user_id)
-            VALUES($1, $2) RETURNING *`,
-      values: [productId, userId]
+      text: `INSERT INTO carts(user_id)
+            VALUES($1) RETURNING *`,
+      values: [userId]
     });
   },
 
-  getAllUserCarts(userId) {
+  updateCart(newCartproducts, userId) {
+    return ({
+      text: `UPDATE carts SET products_id = $1
+             WHERE user_id = $2`,
+      values: [newCartproducts, userId]
+    });
+  },
+
+  getUserCart(userId) {
     return ({
       text: 'SELECT * FROM carts WHERE user_id = $1',
       values: [userId]

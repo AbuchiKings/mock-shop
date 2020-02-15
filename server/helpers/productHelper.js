@@ -1,3 +1,5 @@
+import 'core-js/stable';
+import 'regenerator-runtime';
 import errorHandler from '../utils/handleError';
 import pool from '../utils/pool';
 import query from '../queries/queries';

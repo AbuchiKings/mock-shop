@@ -1,3 +1,4 @@
+import 'core-js/stable';
 import { Pool } from 'pg';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
@@ -39,9 +40,8 @@ const products = `CREATE TABLE IF NOT EXISTS products (
 
 const carts = `CREATE TABLE IF NOT EXISTS carts (
     id SERIAL PRIMARY KEY NOT NULL,
-    product_id INT NOT NULL,
     user_id INT NOT NULL,
-    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
+    products_id TEXT [] DEFAULT ARRAY[]::TEXT[],
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );`;
 

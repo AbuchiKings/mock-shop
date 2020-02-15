@@ -1,3 +1,5 @@
+import 'core-js/stable';
+import 'regenerator-runtime';
 import UserHelper from '../helpers/userHelper';
 import responseHandler from '../utils/handleResponse';
 
