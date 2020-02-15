@@ -120,6 +120,9 @@ function formatCart(products, cartId, userId) {
         return totalPrice;
     });
 
-    return { cartId, userId, totalItems, totalPrice: totalPrice.toFixed(2), products };
+    return {
+        cartId, userId, totalItems,
+        totalPrice: totalPrice.toFixed(2), products
+    };
 }
 export default CartHelper;
