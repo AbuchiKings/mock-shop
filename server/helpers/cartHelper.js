@@ -54,8 +54,8 @@ class CartHelper {
 
     static async getCart(req) {
         try {
-           
-            let userId  = req.user.id;
+
+            let userId = req.user.id;
             userId = parseInt(userId, 10);
             let userCart = await pool.query(query.getUserCart(userId));
 
@@ -72,35 +72,54 @@ class CartHelper {
             return formatCart(products, userCart.rows[0].id, userId);
 
         } catch (error) {
-            return(error);
+            return (error);
         }
     }
 
     static async deleteCartItem(req) {
         try {
-            let { cartId, userId } = req.body;
-            cartId = parseInt(cartId, 10);
+            let productId = req.query.productId;
+            let userId = req.user.id;
             userId = parseInt(userId, 10);
-            
-            const cart = await pool.query(query.getCart(cartId, userId));
-            if (cart.rowCount < 1) errorHandler(404, 'Product not found');
-            let deletedCart = await pool.query(query.deleteCart(id));
-            if (deletedProduct.rowCount < 1) throw new Error('There was a problem deleting product');
-            return [];
+            productId = parseInt(productId, 10);
+
+            const product = await pool.query(query.getProduct(productId));
+            if (product.rowCount < 1) return errorHandler(404, 'Product not found.');
+
+            let cart = await pool.query(query.getUserCart(userId));
+            if (cart.rowCount < 1) return errorHandler(404, 'Cart is empty');
+            if (cart.rows[0].products_id.length < 1) return errorHandler(404, 'No product in cart');
+            if (!cart.rows[0].products_id.includes(String(productId))) {
+                return errorHandler(404, 'Product not in cart');
+            }
+
+            let products = cart.rows[0].products_id.filter(product_id => {
+                return parseInt(product_id, 10) !== productId;
+            });
+            console.log(products);
+            let result = await updateCart(products, userId);
+
+            if (result instanceof Error) return errorHandler(500, result.message);
+
+            if (result.length < 1) return errorHandler(404, 'No product in cart');
+
+            return formatCart(result, cart.rows[0].id, userId);
         } catch (error) {
             return error;
         }
     }
 }
 
-//Formats response and calculates price
+//Formats response and calculates total price
 function formatCart(products, cartId, userId) {
     let totalPrice = 0;
+    totalItems = 0;
     products.forEach(product => {
         totalPrice += product.price;
+        totalItems += 1;
         return totalPrice;
     });
 
-    return { cartId, userId, totalPrice: totalPrice.toFixed(2), products };
+    return { cartId, userId, totalItems, totalPrice: totalPrice.toFixed(2), products };
 }
 export default CartHelper;

@@ -14,15 +14,11 @@ router.get('/carts',
     auth.verifyToken,
     CartController.getCart
 );
-// router.put('/carts',
-//    // auth.verifyToken,
-//     //auth.verifyAdmin,
-//     CartController.createCart
-// );
-// router.put('/carts',
-//    // auth.verifyToken,
-//     //auth.verifyAdmin,
-//     CartController.createCart
-// );
+
+router.delete('/carts',
+    auth.verifyToken,
+    CartController.deleteCartItem
+);
+
 
 export default router;
