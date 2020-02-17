@@ -5,17 +5,17 @@ import CartController from '../controller/cartController';
 
 const router = Router();
 
-router.put('/carts',
+router.put('/cart',
     auth.verifyToken,
     CartController.addToCart
 );
 
-router.get('/carts',
+router.get('/cart',
     auth.verifyToken,
     CartController.getCart
 );
 
-router.delete('/carts',
+router.delete('/cart/:id',
     auth.verifyToken,
     CartController.deleteCartItem
 );

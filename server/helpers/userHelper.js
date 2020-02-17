@@ -96,11 +96,7 @@ class UserHelper {
 
             if (rowCount < 1) return errorHandler(404, 'Account not found');
 
-            const password = req.body.password;
             const user = rows[0];
-            const validPassword = await bcrypt.compare(password, user.password);
-
-            if (!validPassword) return errorHandler(401, 'Invalid password');
 
             if (user.is_admin && user.id === 1) {
                 return errorHandler(403, 'Forbidden');

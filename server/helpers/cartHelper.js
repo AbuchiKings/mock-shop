@@ -78,7 +78,7 @@ class CartHelper {
 
     static async deleteCartItem(req) {
         try {
-            let productId = req.query.productId;
+            let productId = req.params.id;
             let userId = req.user.id;
             userId = parseInt(userId, 10);
             productId = parseInt(productId, 10);
@@ -126,3 +126,4 @@ function formatCart(products, cartId, userId) {
     };
 }
 export default CartHelper;
+
