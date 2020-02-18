@@ -8,12 +8,16 @@ const router = Router();
 router.post('/products',
     auth.verifyToken,
     auth.verifyAdmin,
+    validator.validateNewProduct,
+    validator.validationHandler,
     ProductController.createProduct
 );
 
 router.patch('/products/:id',
     auth.verifyToken,
     auth.verifyAdmin,
+    validator.validateProductUpdate,
+    validator.validationHandler,
     ProductController.updateProduct
 );
 
@@ -23,12 +27,16 @@ router.get('/products',
 );
 router.get('/products/:id',
     auth.verifyToken,
+    validator.validateId,
+    validator.validationHandler,
     ProductController.getProduct
 );
 
 router.delete('/products/:id',
     auth.verifyToken,
     auth.verifyAdmin,
+    validator.validateId,
+    validator.validationHandler,
     ProductController.deleteProduct
 );
 

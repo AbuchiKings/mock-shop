@@ -3,6 +3,7 @@ import 'regenerator-runtime';
 import errorHandler from '../utils/handleError';
 import pool from '../utils/pool';
 import query from '../queries/queries';
+import { request } from 'express';
 
 
 class ProductHelper {
@@ -31,14 +32,19 @@ class ProductHelper {
 
     static async updateProduct(req) {
         try {
-            let id = req.params.id;
-            let price = req.body.price;
+            const allProducts = await pool.query(query.getAllProducts());
+            const isExists = req.body.name ? allProducts.rows.some(product => product.name === req.body.name) : false;
 
-            if (price) {
-                price = parseFloat(price, 10).toFixed(2);
+            if (isExists) {
+                errorHandler(409, 'The provided product name already exists.');
             }
-
-            let product = { ...req.body, price }
+            let id = req.params.id;
+            let product = request.body;
+            let price;
+            if (req.body.price !== undefined) {
+                price = parseFloat(req.body.price, 10).toFixed(2);
+                product =  { ...req.body, price };
+            } 
 
             id = parseInt(id, 10);
             const productData = await pool.query(query.getProduct(id));

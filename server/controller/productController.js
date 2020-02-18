@@ -12,11 +12,11 @@ class ProductController {
 
     static async getAllProducts(req, res, next) {
         const result = await ProductHelper.getAllProducts(req);
-        responseHandler(res, result, next, 200, 'Login successful');
+        responseHandler(res, result, next, 200, 'Success!');
     }
     static async getProduct(req, res, next) {
         const result = await ProductHelper.getProduct(req);
-        responseHandler(res, result, next, 200, 'Login successful');
+        responseHandler(res, result, next, 200, 'Success!');
     }
 
     static async updateProduct(req, res, next) {

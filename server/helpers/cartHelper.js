@@ -9,8 +9,7 @@ class CartHelper {
     static async addToCart(req) {
         try {
             let { productId } = req.body;
-            let userId = req.user.id;
-            userId = parseInt(userId, 10);
+            let userId = parseInt(req.user.id, 10)
             productId = parseInt(productId, 10);
 
             const product = await pool.query(query.getProduct(productId));
@@ -113,7 +112,7 @@ class CartHelper {
 //Formats response and calculates total price
 function formatCart(products, cartId, userId) {
     let totalPrice = 0;
-    totalItems = 0;
+    let totalItems = 0;
     products.forEach(product => {
         totalPrice += product.price;
         totalItems += 1;

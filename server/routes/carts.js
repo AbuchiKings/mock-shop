@@ -7,6 +7,8 @@ const router = Router();
 
 router.put('/cart',
     auth.verifyToken,
+    validator.validateAddToCart,
+    validator.validationHandler,
     CartController.addToCart
 );
 
@@ -17,6 +19,8 @@ router.get('/cart',
 
 router.delete('/cart/:id',
     auth.verifyToken,
+    validator.validateId,
+    validator.validationHandler,
     CartController.deleteCartItem
 );
 

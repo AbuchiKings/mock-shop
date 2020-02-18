@@ -60,6 +60,9 @@ class UserHelper {
     static async updatePassword(req) {
         try {
             const userId = parseInt(req.params.id, 10);
+            const userId2 = parseInt(req.user.id);
+            if(userId2 !== userId) return errorHandler(403, 'Unauthorised');
+
 
             const { rows } = await pool.query(query.getUserById(userId));
             if (!rows[0]) errorHandler(404, 'Account not found');

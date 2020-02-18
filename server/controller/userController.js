@@ -16,7 +16,7 @@ class UserController {
 
     static async updatePassword(req, res, next) {
         const result = await UserHelper.updatePassword(req)
-        responseHandler(res, result, next, 200, 'User updated successfully');
+        responseHandler(res, result, next, 200, 'Password updated successfully');
     }
 
     static async deleteUser(req, res, next) {

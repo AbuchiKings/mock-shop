@@ -11,7 +11,7 @@ function verifyToken(req, res, next) {
 
     const access = req.headers.authorization
     if (!access) {
-        errorHandler(401, 'Headers not set');
+        return errorHandler(401, 'Headers not set');
     }
 
     let bearerToken = access.split(' ');
