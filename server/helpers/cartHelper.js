@@ -95,7 +95,6 @@ class CartHelper {
             let products = cart.rows[0].products_id.filter(product_id => {
                 return parseInt(product_id, 10) !== productId;
             });
-            console.log(products);
             let result = await updateCart(products, userId);
 
             if (result instanceof Error) return errorHandler(500, result.message);

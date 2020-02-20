@@ -40,6 +40,7 @@
     "start": "npm run connection && npm run build && node ./dist",
     "connection": "babel-node ./server/config/db.js --env",
     "start:dev": "nodemon --exec babel-node ./server/index.js --env",
+    "heroku-postbuild": "npm install --production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
