@@ -1,0 +1,10 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: Mock Shop
+  description: 'Mock Shop is a web application where users can shop for commodities.'
+
+schemes:
+  - https
+host: 
+basePath: '/api/v1'
