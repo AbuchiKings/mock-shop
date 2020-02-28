@@ -11,5 +11,9 @@ router.use('/api/v1', users);
 
 router.use('/api/v1', carts);
 
+router.all('*', (req, res) => {
+    res.status(404).json({ message: 'This route does not exist.' });
+});
+
 
 export default router;
