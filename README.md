@@ -1,4 +1,10 @@
 # Mock-shop
+
+[![Build Status](https://travis-ci.com/AbuchiKings/mock-shop.svg?branch=develop)](https://travis-ci.com/AbuchiKings/mock-shop)
+[![Coverage Status](https://coveralls.io/repos/github/AbuchiKings/mock-shop/badge.svg?branch=develop)](https://coveralls.io/github/AbuchiKings/mock-shop?branch=develop)
+<a href="https://codeclimate.com/github/AbuchiKings/mock-shop/maintainability"><img src="https://api.codeclimate.com/v1/badges/1f72700e4640352cde62/maintainability" /></a>
+
+
 Mock-shop is a simple API for an online store.
 
 

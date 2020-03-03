@@ -26,13 +26,22 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "coveralls": "^3.0.9",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",
     "mocha": "^7.0.1",
     "nodemon": "^1.19.4",
     "nyc": "^15.0.0",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "sinon": "^9.0.0",
+    "sinon-express-mock": "^2.2.1"
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.spec.js",
+      "**/tests"
+    ]
   },
   "scripts": {
     "lint": "eslint ./server",
@@ -41,7 +50,7 @@
     "connection": "babel-node ./server/config/db.js --env",
     "start:dev": "nodemon --exec babel-node ./server/index.js --env",
     "heroku-postbuild": "npm install --production",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "nyc --reporter=text --reporter=html mocha --recursive ./server/tests --exit --require babel-register"
   },
   "keywords": [
     "products",
