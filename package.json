@@ -50,7 +50,7 @@
     "connection": "babel-node ./server/config/db.js --env",
     "start:dev": "nodemon --exec babel-node ./server/index.js --env",
     "heroku-postbuild": "npm install --production",
-    "test": "nyc --reporter=text --reporter=html mocha --recursive ./server/tests --exit --require babel-register"
+    "test": "nyc --reporter=text --reporter=html mocha --recursive ./server/tests --exit --require @babel/register"
   },
   "keywords": [
     "products",
