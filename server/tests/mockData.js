@@ -30,12 +30,22 @@ const signUp = {
 
 };
 
+const login = {
+    invalidEmailAddress:{
+        email: 'jamespatrickyahoo.com',
+        password: 'qwerty',
+    },
+    invalidPassword:{
+        email: 'jamespatrick@yahoo.com',
+        password: '  ',
+    }
+};
 
 
 
 
 export default {
-    // login,
+    login,
     signUp
     // modifyUser,
     // category,
