@@ -28,5 +28,41 @@ describe('User', () => {
             expect(response.body.errors).to.be.an('array');
             expect(response.body.errors[0]).to.have.property('msg');
         });
+
+        it('Invalid email address should return an error', async () => {
+            const response = await chai
+                .request(app)
+                .post('/api/v1/auth/signup')
+                .send(mockData.signUp.invalidEmailAddress);
+
+            expect(response.status).to.equal(422);
+            expect(response.body).to.have.property('errors');
+            expect(response.body.errors).to.be.an('array');
+            expect(response.body.errors[0].msg).to.equal('Invalid email address');
+        });
+
+        it('Used email address should return an error', async () => {
+            const response = await chai
+                .request(app)
+                .post('/api/v1/auth/signup')
+                .send(mockData.signUp.usedEmailAddress);
+
+            expect(response.status).to.equal(409);
+            expect(response.body).to.have.property('status');
+            expect(response.body).to.have.property('message');
+            expect(response.body.status).to.equal('error');
+            expect(response.body.message).to.equal('Email address is already in use');
+        });
+
+        it('Database error should be handled', async () => {
+            const userHelperStub = sinon.stub(UserHelper, 'createUser').returns(new Error());
+            const response = await chai
+                .request(app)
+                .post('/api/v1/auth/signup')
+                .send(mockData.signUp.validUserSignup);
+
+            expect(response.status).to.equal(500);
+            userHelperStub.restore();
+        });
     });
 });

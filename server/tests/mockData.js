@@ -23,7 +23,7 @@ const signUp = {
     validUserSignup: {
         firstName: 'James',
         lastName: 'Patrick',
-        email: 'jamespatrick@gmail.com',
+        email: 'jamespatrick@yahoo.com',
         password: 'qwerty',
         isAdmin: true
     },
