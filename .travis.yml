@@ -1,7 +1,42 @@
 language: node_js
 
 node_js:
-  - "10"
+  - "stable"
+
+  services:
+  - "Postgresql"
+before_script:
+  - psql -c 'CREATE DATABASE store;' -U postgres
+  - psql -c 'CREATE TABLE IF NOT EXISTS
+  users(
+    id SERIAL PRIMARY KEY NOT NULL,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password VARCHAR(225) NOT NULL,
+    is_admin BOOLEAN DEFAULT false,
+    registered TIMESTAMP DEFAULT CURRENT_DATE NOT NULL
+  );' -U postgres
+  - psql -c 'CREATE TABLE IF NOT EXISTS
+  products(
+    id SERIAL PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
+    description VARCHAR(300),
+    category TEXT NOT NULL,
+    price FLOAT NOT NULL,
+    image_url TEXT NOT NULL,
+    in_stock BOOLEAN DEFAULT true
+  );' -U postgres
+  - psql -c 'CREATE TABLE IF NOT EXISTS carts (
+    id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT NOT NULL,
+    products_id TEXT [] DEFAULT ARRAY[]::TEXT[],
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );' -U postgres
+  - psql -c 'INSERT INTO
+    users(first_name = "Abuchi", last_name = "Kingsley", email = "abuchikings@mockshop.com", password = "$2b$10$f3SSgDuitBxdKBU9tlJ8jOnhKfat4JYrJkfsXPvzNILM2GL.b0vKm", is_admin = true);' -U postgres
+  - psql -c 'INSERT INTO  
+    users(first_name = "Abuchi", last_name = "Kingsley", email = "abuchikings@gmail.com", password = "$2b$10$f3SSgDuitBxdKBU9tlJ8jOnhKfat4JYrJkfsXPvzNILM2GL.b0vKm", is_admin = false);' -U postgres
 
 cache:
 directories:
