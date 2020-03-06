@@ -2,8 +2,10 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import app from '../index';
-import mockData from './mockData';
+import mockData from './mock/mockData';
+import usersData from './mock/mockUserDb'
 import UserHelper from '../helpers/userHelper';
+import pool from './../utils/pool';
 
 const { expect } = chai;
 chai.use(chaiHttp);
@@ -50,6 +52,20 @@ describe('User', () => {
 
             expect(response.status).to.equal(500);
             userHelperStub.restore();
+        });
+
+        it('Valid user details with used email should return an error', async () => {
+            sinon.stub(pool, 'query').returns(usersData.foundUser);
+            const response = await chai
+                .request(app)
+                .post('/api/v1/auth/signup')
+                .send(mockData.signUp.validUserSignup);
+
+            expect(response.status).to.equal(409);
+            expect(response.body).to.have.property('status');
+            expect(response.body).to.have.property('message');
+            expect(response.body.message).to.equal('Email address is already in use');
+            pool.query.restore();
         });
     });
 

@@ -20,7 +20,6 @@ class UserHelper {
             isAdmin = isAdmin ? isAdmin : false
 
             const foundUser = await pool.query(query.getUserByEmail(email));
-
             if (foundUser.rowCount > 0) return errorHandler(409, 'Email address is already in use');
 
             const hashedPassword = await bcrypt.hash(password, 10);
