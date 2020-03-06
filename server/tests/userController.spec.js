@@ -81,5 +81,16 @@ describe('User', () => {
             expect(response.body.errors).to.be.an('array');
             expect(response.body.errors[0].msg).to.equal('Invalid email address');
           });
+
+        it('Empty password field should return an error', async () => {
+            const response = await chai
+              .request(app)
+              .post('/api/v1/auth/login')
+              .send(mockData.login.emptyPassowrd);
+      
+            expect(response.status).to.equal(422);
+            expect(response.body).to.have.property('errors');
+            expect(response.body.errors).to.be.an('array');
+          });
     });
 });

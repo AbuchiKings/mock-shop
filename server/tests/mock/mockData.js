@@ -35,9 +35,17 @@ const login = {
         email: 'jamespatrickyahoo.com',
         password: 'qwerty',
     },
+    emptyPassowrd:{
+        email: 'jamespatrick@yahoo.com',
+        password: '',
+    },
     invalidPassword:{
         email: 'jamespatrick@yahoo.com',
-        password: '  ',
+        password: 'sfgerty',
+    },
+    validDetails:{
+        email: 'jamespatrick@yahoo.com',
+        password: 'qwerty',
     }
 };
 
