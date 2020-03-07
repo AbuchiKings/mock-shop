@@ -43,6 +43,10 @@ const login = {
         email: 'jamespatrick@yahoo.com',
         password: 'sfgerty',
     },
+    unregisteredUser:{
+        email: 'jamespatrick@mockshop.com',
+        password: 'sfgerty',
+    },
     validDetails:{
         email: 'jamespatrick@yahoo.com',
         password: 'qwerty',

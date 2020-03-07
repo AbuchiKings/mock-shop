@@ -45,7 +45,7 @@
   },
   "scripts": {
     "lint": "eslint ./server",
-    "build": "rm -rf ./dist/* && babel ./server --out-dir ./dist --ignore ./server/test",
+    "build": "rm -rf ./dist/* && babel ./server --out-dir ./dist --ignore ./server/tests",
     "start": "npm run connection && npm run build && node ./dist",
     "connection": "babel-node ./server/config/db.js --env",
     "start:dev": "nodemon --exec babel-node ./server/index.js --env",
