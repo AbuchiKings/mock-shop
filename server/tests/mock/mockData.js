@@ -53,6 +53,20 @@ const login = {
     }
 };
 
+const updatePassword = {
+    emptyPasswordFields:{
+        oldPassword: '',
+        newPassword: ''
+    },
+    equalPasswordInputs:{
+        oldPassword: 'qwerty',
+        newPassword: 'qwerty'
+    },
+    incorrectPassword:{
+        oldPassword: 'qwerty',
+        newPassword: 'qwerty'
+    },
+}
 
 
 export default {

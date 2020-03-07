@@ -141,13 +141,31 @@ describe('User', () => {
                 .post('/api/v1/auth/login')
                 .send(mockData.login.validDetails);
 
-            token = response.body.data.token;
 
             expect(response.status).to.equal(200);
             expect(response.body.message).to.equal('Login successful');
             expect(response.body).to.have.property('data');
             expect(response.body.data).to.have.property('token');
+            token = response.body.data.token;
+            console.log(token)
             pool.query.restore();
         });
     });
+
+
+    // describe('User update password', () => {
+    //     describe('When a user tries to update password with no headers set', () => {
+    //         it('Should return an authentication error', async () => {
+    //             const response = await chai
+    //                 .request(app)
+    //                 .post('/api/v1/users/update-password/:id')
+    //                 .send(mockData.);
+
+    //             expect(response.status).to.equal(401);
+    //         });
+    //     });
+    // });
+
+
+
 });
