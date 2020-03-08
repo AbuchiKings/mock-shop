@@ -142,11 +142,11 @@ describe('User', () => {
                 .send(mockData.login.validDetails);
 
             console.log(response)
-            // expect(response.status).to.equal(200);
-            // expect(response.body.message).to.equal('Login successful');
-            // expect(response.body).to.have.property('data');
-            // expect(response.body.data).to.have.property('token');
-            // token = response.body.data.token;
+            expect(response.status).to.equal(200);
+            expect(response.body.message).to.equal('Login successful');
+            expect(response.body).to.have.property('data');
+            expect(response.body.data).to.have.property('token');
+            token = response.body.data.token;
             pool.query.restore();
         });
     });
