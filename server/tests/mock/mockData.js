@@ -62,17 +62,25 @@ const updatePassword = {
         oldPassword: 'qwerty',
         newPassword: 'qwerty'
     },
-    incorrectPassword:{
-        oldPassword: 'qwerty',
+    incorrectOldPassword:{
+        oldPassword: 'derty',
         newPassword: 'qwerty'
     },
+    invalidPasswordsLength:{
+        oldPassword: 'qwerty',
+        newPassword: 'qwer'
+    },
+    validDetails:{
+        oldPassword: 'qwerty',
+        newPassword: 'inflames'
+    }
 }
 
 
 export default {
     login,
-    signUp
-    // modifyUser,
+    signUp,
+    updatePassword
     // category,
     // products,
     // newSale,

@@ -80,6 +80,8 @@ describe('User', () => {
                 .send(mockData.signUp.validUserSignup);
 
             expect(response.status).to.equal(201);
+            expect(response.body).to.have.property('data');
+            expect(response.body.data).to.not.be.empty;
             poolStub.restore();
         });
     });
@@ -141,7 +143,6 @@ describe('User', () => {
                 .post('/api/v1/auth/login')
                 .send(mockData.login.validDetails);
 
-            console.log(response)
             expect(response.status).to.equal(200);
             expect(response.body.message).to.equal('Login successful');
             expect(response.body).to.have.property('data');
@@ -152,18 +153,118 @@ describe('User', () => {
     });
 
 
-    // describe('User update password', () => {
-    //     describe('When a user tries to update password with no headers set', () => {
-    //         it('Should return an authentication error', async () => {
-    //             const response = await chai
-    //                 .request(app)
-    //                 .post('/api/v1/users/update-password/:id')
-    //                 .send(mockData.);
+    describe('User update password', () => {
+        describe('When a user tries to update password with no headers set', () => {
+            it('It should return an authentication error', async () => {
+                const response = await chai
+                    .request(app)
+                    .patch('/api/v1/users/update-password/9')
+                    .send(mockData.updatePassword.validDetails);
 
-    //             expect(response.status).to.equal(401);
-    //         });
-    //     });
-    // });
+                expect(response.status).to.equal(401);
+            });
+        });
+
+        describe('When a user enters new password of invalid length', () => {
+            it('It should return an unprocessible entity error', async () => {
+                const response = await chai
+                    .request(app)
+                    .patch('/api/v1/users/update-password/9')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send(mockData.updatePassword.invalidPasswordsLength);
+
+                expect(response.status).to.equal(422);
+                expect(response.body).to.have.property('errors');
+                expect(response.body.errors).to.be.an('array');
+                expect(response.body.errors[0]).to.have.property('msg');
+            });
+        });
+
+        describe('When a user\'s new password is equal to old password', () => {
+            it('It should return an unprocessible entity error', async () => {
+                const response = await chai
+                    .request(app)
+                    .patch('/api/v1/users/update-password/9')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send(mockData.updatePassword.equalPasswordInputs);
+
+                expect(response.status).to.equal(422);
+                expect(response.body).to.have.property('errors');
+                expect(response.body.errors).to.be.an('array');
+                expect(response.body.errors[0]).to.have.property('msg');
+                expect(response.body.errors[0].msg).to.equal('New password cannot be the same as old password');
+            });
+        });
+
+        describe('When a user submits an empty form', () => {
+            it('It should return an unprocessible entity error', async () => {
+                const response = await chai
+                    .request(app)
+                    .patch('/api/v1/users/update-password/9')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send(mockData.updatePassword.emptyPasswordFields);
+
+                expect(response.status).to.equal(422);
+                expect(response.body).to.have.property('errors');
+                expect(response.body.errors).to.be.an('array');
+                expect(response.body.errors[0]).to.have.property('msg');
+            });
+        });
+
+        describe('When a user tries to update password for a nonexistent account', () => {
+            it('It should return a not found error', async () => {
+                sinon.stub(pool, 'query').returns(mockUserDb.notFoundUser);
+
+                const response = await chai
+                    .request(app)
+                    .patch('/api/v1/users/update-password/9')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send(mockData.updatePassword.validDetails);
+
+                expect(response.status).to.equal(404);
+                expect(response.body).to.have.property('status');
+                expect(response.body).to.have.property('message');
+                expect(response.body.message).to.equal('Account not found');
+                pool.query.restore();
+            });
+        });
+
+        describe('When a user enters an incorrect old password', () => {
+            it('It should return an unauthorised error', async () => {
+                sinon.stub(pool, 'query').returns(mockUserDb.foundUser);
+                const response = await chai
+                    .request(app)
+                    .patch('/api/v1/users/update-password/9')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send(mockData.updatePassword.incorrectOldPassword);
+
+                expect(response.status).to.equal(401);
+                expect(response.body).to.have.property('status');
+                expect(response.body).to.have.property('message');
+                expect(response.body.message).to.equal('Password is incorrect');
+                pool.query.restore();
+            });
+        });
+
+        describe('When a user enters valid details with headers set', () => {
+            it('It should return a successful response', async () => {
+                sinon.stub(pool, 'query').returns(mockUserDb.foundUser);
+                const response = await chai
+                    .request(app)
+                    .patch('/api/v1/users/update-password/9')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send(mockData.updatePassword.validDetails);
+
+                expect(response.status).to.equal(200);
+                expect(response.body.message).to.equal('Password updated successfully');
+                expect(response.body).to.have.property('data');
+                pool.query.restore();
+            });
+        });
+    });
+
+
+
 
 
 

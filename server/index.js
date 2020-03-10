@@ -21,8 +21,5 @@ app.listen(port, () => {
   console.log(`Server Started on port ${port}`);
 });
 
-process.on('uncaughtException', (err) => {
-  console.log(err);
-});
 
 export default app;
