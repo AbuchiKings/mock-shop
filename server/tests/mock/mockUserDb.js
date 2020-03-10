@@ -22,5 +22,22 @@ const foundUser = {
         }],
     fields: []
 }
+const owner = {
+    command: 'SELECT',
+    rowCount: 1,
+    oid: null,
+    rows:
+        [{
+            id: 1,
+            first_name: 'James',
+            last_name: 'Patrick',
+            email: 'jamespatrick@gmail.com',
+            password:
+                '$2b$10$YFz1L5SleQxXsCfQJql1ru6SAV2wla06xceuhOKwulFP6L15NIv/y',
+            is_admin: true,
+            registered: '2020 - 03 - 05T23: 00: 00.000Z'
+        }],
+    fields: []
+}
 
-export default {foundUser, notFoundUser}
+export default {foundUser, notFoundUser, owner}

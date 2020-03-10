@@ -211,6 +211,21 @@ describe('User', () => {
             });
         });
 
+        describe('When a user enters an invalid url parameter', () => {
+            it('It should return an unprocessible entity error', async () => {
+                const response = await chai
+                    .request(app)
+                    .patch('/api/v1/users/update-password/qwe')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send(mockData.updatePassword.validDetails);
+
+                expect(response.status).to.equal(422);
+                expect(response.body).to.have.property('errors');
+                expect(response.body.errors).to.be.an('array');
+                expect(response.body.errors[0]).to.have.property('msg');
+            });
+        });
+
         describe('When a user tries to update password for a nonexistent account', () => {
             it('It should return a not found error', async () => {
                 sinon.stub(pool, 'query').returns(mockUserDb.notFoundUser);
@@ -261,11 +276,96 @@ describe('User', () => {
                 pool.query.restore();
             });
         });
+
+        describe('When a database error occurs', () => {
+            it('It should be handled', async () => {
+                const userHelperStub = sinon.stub(UserHelper, 'updatePassword').returns(new Error());
+                const response = await chai
+                    .request(app)
+                    .patch('/api/v1/users/update-password/9')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send(mockData.updatePassword.validDetails);
+
+                expect(response.status).to.equal(500);
+                userHelperStub.restore();
+            });
+        });
     });
 
 
+    describe('Delete User account', () => {
+        describe('When a user tries to  delete account with no headers set', () => {
+            it('It should return an authentication error', async () => {
+                const response = await chai
+                    .request(app)
+                    .delete('/api/v1/users/9');
 
+                expect(response.status).to.equal(401);
+            });
+        });
 
+        describe('When a user enters an invalid url parameter', () => {
+            it('It should return an unprocessible entity error', async () => {
+                const response = await chai
+                    .request(app)
+                    .delete('/api/v1/users/qwe')
+                    .set('Authorization', `Bearer ${token}`)
+
+                expect(response.status).to.equal(422);
+                expect(response.body).to.have.property('errors');
+                expect(response.body.errors).to.be.an('array');
+                expect(response.body.errors[0]).to.have.property('msg');
+            });
+        });
+
+        describe('When a user tries to delete a nonexistent account', () => {
+            it('It should return a not found error', async () => {
+                sinon.stub(pool, 'query').returns(mockUserDb.notFoundUser);
+                const response = await chai
+                    .request(app)
+                    .delete('/api/v1/users/9')
+                    .set('Authorization', `Bearer ${token}`)
+
+                expect(response.status).to.equal(404);
+                expect(response.body).to.have.property('status');
+                expect(response.body).to.have.property('message');
+                expect(response.body.message).to.equal('Account not found');
+                pool.query.restore();
+            });
+        });
+
+        describe('When there is an attempt to delete owner\'s account', () => {
+            it('It should return a forbidden error', async () => {
+                sinon.stub(pool, 'query').returns(mockUserDb.owner);
+                const response = await chai
+                    .request(app)
+                    .delete('/api/v1/users/9')
+                    .set('Authorization', `Bearer ${token}`)
+
+                expect(response.status).to.equal(403);
+                expect(response.body).to.have.property('status');
+                expect(response.body).to.have.property('message');
+                expect(response.body.message).to.equal('Forbidden');
+                pool.query.restore();
+            });
+        });
+
+        describe('When a user tries to delete an existing account with valid details and headers', () => {
+            it('It should return a successful response', async () => {
+                sinon.stub(pool, 'query').returns(mockUserDb.foundUser);
+                const response = await chai
+                    .request(app)
+                    .delete('/api/v1/users/9')
+                    .set('Authorization', `Bearer ${token}`)
+
+                expect(response.status).to.equal(200);
+                expect(response.body.message).to.equal('User deleted successfully');
+                expect(response.body).to.have.property('data');
+                pool.query.restore();
+            });
+        });
+
+    });
 
 
 });
