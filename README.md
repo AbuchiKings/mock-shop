@@ -26,6 +26,25 @@ Mock-shop is a simple API for an online store.
 * User can delete account
 
 
+## API Endpoints
+
+### basepath `https://abuchikings-mockshop.herokuapp.com/api/v1`
+
+
+* POST  Create a user account               (/auth/signup)
+* POST  User login                          (/auth/login)
+* PATCH Update user password                (/users/update-password/:id)
+* DELETE Delete user                        (/users/:id)
+* POST Create product                       (/products)
+* PATCH Update product                      (/products/:id)
+* GET All products                          (/products)
+* GET Single product                        (/products/:id)
+* DELETE Delete product                     (/products/:id)
+* PUT Add product to cart                   (/cart)
+* GET Cart                                  (/cart)
+* DELETE Cart                               (/cart)
+
+
 ## Technologies Used
 
 * [Node.js](https://nodejs.org) - A runtime environment based off of Chrome's V8 Engine for writing Javascript code on the server.
