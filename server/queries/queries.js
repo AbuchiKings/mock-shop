@@ -18,14 +18,14 @@ const queries = {
 
   getUserByEmail(email) {
     return ({
-      text: `SELECT * FROM users WHERE email = $1`,
+      text: 'SELECT * FROM users WHERE email = $1',
       values: [email]
     });
   },
 
   getUserById(id) {
     return ({
-      text: `SELECT * FROM users WHERE id = $1`,
+      text: 'SELECT * FROM users WHERE id = $1',
       values: [id]
     });
   },
@@ -34,15 +34,15 @@ const queries = {
     return ({
       text: `UPDATE users SET
             password = COALESCE($1, password) WHERE id = $2 RETURNING *`,
-  values: [hashNewPassword, userId]
+      values: [hashNewPassword, userId]
     });
   },
 
   deleteUser(userId) {
     return ({
-      text: `DELETE FROM users WHERE id = $1 RETURNING *`,
+      text: 'DELETE FROM users WHERE id = $1 RETURNING *',
       values: [userId]
-    })
+    });
   },
 
   createProduct(product) {
@@ -85,21 +85,28 @@ const queries = {
 
   getProduct(id) {
     return ({
-      text: `SELECT * FROM products WHERE product_id = $1`,
+      text: 'SELECT * FROM products WHERE product_id = $1',
       values: [id]
+    });
+  },
+
+  getProductByName(name) {
+    return ({
+      text: 'SELECT * FROM products WHERE name = $1',
+      values: [name]
     });
   },
 
   getAllProducts() {
     return ({
-      text: `SELECT * FROM products`,
+      text: 'SELECT * FROM products',
       values: []
     });
   },
 
   deleteProduct(id) {
     return ({
-      text: `DELETE FROM products WHERE product_id = $1 RETURNING *`,
+      text: 'DELETE FROM products WHERE product_id = $1 RETURNING *',
       values: [id]
     });
   },
@@ -122,14 +129,14 @@ const queries = {
 
   getUserCart(userId) {
     return ({
-      text: `SELECT * FROM carts WHERE user_id = $1`,
+      text: 'SELECT * FROM carts WHERE user_id = $1',
       values: [userId]
     });
   },
 
   getAllProductsInCarts(userId) {
     return ({
-      text: `SELECT products_id FROM carts WHERE user_id = $1`,
+      text: 'SELECT products_id FROM carts WHERE user_id = $1',
       values: [userId]
     });
   },

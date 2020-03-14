@@ -7,29 +7,25 @@ const router = Router();
 
 
 router.post('/auth/signup',
-    validator.validateSignup,
-    validator.validationHandler,
-    UserController.createUser
-);
+  validator.validateSignup,
+  validator.validationHandler,
+  UserController.createUser);
 
 router.post('/auth/login',
-    validator.validateLogin,
-    validator.validationHandler,
-    UserController.login
-);
+  validator.validateLogin,
+  validator.validationHandler,
+  UserController.login);
 
 
 router.patch('/users/update-password/:id',
-    auth.verifyToken,
-     validator.validatePasswordUpdate,
-    validator.validationHandler,
-    UserController.updatePassword
-);
+  auth.verifyToken,
+  validator.validatePasswordUpdate,
+  validator.validationHandler,
+  UserController.updatePassword);
 
 router.delete('/users/:id',
-    auth.verifyToken,
-    validator.validateId,
-    validator.validationHandler,
-    UserController.deleteUser
-);
+  auth.verifyToken,
+  validator.validateId,
+  validator.validationHandler,
+  UserController.deleteUser);
 export default router;

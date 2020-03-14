@@ -6,32 +6,29 @@ dotenv.config();
 const SECRET = process.env.JWT_KEY;
 
 
-
 function verifyToken(req, res, next) {
+  const access = req.headers.authorization;
+  if (!access) {
+    return errorHandler(401, 'Headers not set');
+  }
 
-    const access = req.headers.authorization
-    if (!access) {
-        return errorHandler(401, 'Headers not set');
+  const bearerToken = access.split(' ');
+  const token = bearerToken[1];
+  jwt.verify(token, SECRET, (err, decodedToken) => {
+    if (err) {
+      errorHandler(401, err.name);
     }
-
-    let bearerToken = access.split(' ');
-    const token = bearerToken[1];
-    jwt.verify(token, SECRET, (err, decodedToken) => {
-        if (err) {
-            errorHandler(401, err.name);
-        }
-        req.user = decodedToken;
-        next();
-    });
-
+    req.user = decodedToken;
+    next();
+  });
 }
 
 const verifyAdmin = (req, res, next) => {
-    const { is_admin } = req.user;
-    if (!is_admin) {
-      errorHandler(403, 'Unauthorized Access. For admins/owner accounts only');
-    }
-    next();
-  };
+  const { is_admin } = req.user;
+  if (!is_admin) {
+    errorHandler(403, 'Unauthorized Access. For admins/owner accounts only');
+  }
+  next();
+};
 
-export default {verifyToken, verifyAdmin};
+export default { verifyToken, verifyAdmin };
