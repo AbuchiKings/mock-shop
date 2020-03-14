@@ -76,13 +76,23 @@ const updatePassword = {
     }
 }
 
+const product = {
+    validProduct : {
+        "description": "Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.",
+        "name": "Cristian Gilbanks",
+        "price": 30.99,
+        "imageUrl": "http://example.com/photo.jpg",
+        "category": "Electronics",
+        "inStock": "true"
+    },
+}
+
 
 export default {
     login,
     signUp,
-    updatePassword
-    // category,
-    // products,
+    updatePassword,
+    product,
     // newSale,
     // invalidProductEntry,
     // validProductEntry
