@@ -364,8 +364,5 @@ describe('User', () => {
                 pool.query.restore();
             });
         });
-
     });
-
-
 });
