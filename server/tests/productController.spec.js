@@ -129,7 +129,7 @@ describe('Products', () => {
             it('It should return an unauthorized error', async () => {
                 const response = await chai
                     .request(app)
-                    .post('/api/v1/products/13')
+                    .patch('/api/v1/products/13')
                     .send(mockData.products.validProduct);
 
                 expect(response.status).to.equal(401);
@@ -137,15 +137,16 @@ describe('Products', () => {
             });
         });
 
-        describe('When admin tries to update a product no ', () => {
+        describe('When a non-admin tries to update a product', () => {
             it('It should return an unauthorized error', async () => {
                 const response = await chai
                     .request(app)
-                    .post('/api/v1/products/13')
+                    .patch('/api/v1/products/13')
+                    .set('Authorization', `Bearer ${userToken}`)
                     .send(mockData.products.validProduct);
 
-                expect(response.status).to.equal(401);
-                expect(response.body.message).to.equal('Headers not set');
+                expect(response.status).to.equal(403);
+                expect(response.body.message).to.equal('Unauthorized Access. For admins/owner accounts only');
             });
         });
     });
