@@ -69,7 +69,7 @@ paths:
                 msg: A valid email must be provided
                 param: email
                 location: body
-              - ...  
+              - ...
 
         500:
           description: "Internal server error"
@@ -125,7 +125,7 @@ paths:
                 msg: Invalid email address
                 param: email
                 location: body
-              - ... 
+              - ...
         500:
           description: Internal server error
           example:
@@ -196,7 +196,7 @@ paths:
                 msg: Id must be a positive integer not less than 1
                 param: id
                 location: params
-              - ... 
+              - ...
         500:
           description: Internal server error
           example:
@@ -260,7 +260,7 @@ paths:
                 msg: Id must be a positive integer not less than 1
                 param: id
                 location: params
-              - ...  
+              - ...
         500:
           description: Internal server error
           example:
@@ -327,7 +327,7 @@ paths:
                 msg: Product image should contain a valid url
                 param: imageUrl
                 location: body
-              - ...  
+              - ...
         500:
           description: Internal server error
           example:
@@ -537,7 +537,7 @@ paths:
           description: "When a non admin tries to delete a product"
           example:
             status: error
-            message: Unauthorized Access. For admins/owner accounts only    
+            message: Unauthorized Access. For admins/owner accounts only
         404:
           description: "Product not in the database"
           example:
@@ -580,13 +580,13 @@ paths:
               totalItems: 1
               totalPrice: 112.99
               products:
-              - product_id: 1
-                name: Desi Avramovitz
-                description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
-                category: clothing
-                price: 112.99
-                image_url: http://example.com/photo.jpg
-                in_stock: true
+                - product_id: 1
+                  name: Desi Avramovitz
+                  description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+                  category: clothing
+                  price: 112.99
+                  image_url: http://example.com/photo.jpg
+                  in_stock: true
         400:
           description: "When cart is full"
           example:
@@ -611,8 +611,7 @@ paths:
           description: The provided input(s) are not supported
           example:
             errors:
-              -
-                msg: Provide an id
+              - msg: Provide an id
                 param: productId
                 location: body
               - value: ""
@@ -634,6 +633,12 @@ paths:
         - application/json
       security:
         - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: The unique identification number of the product  
       responses:
         200:
           description: Cart has been successfully retrieved
@@ -646,21 +651,21 @@ paths:
               totalItems: 1
               totalPrice: 225.98
               products:
-              - product_id: 1
-                name: Desi Avramovitz
-                description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
-                category: clothing
-                price: 112.99
-                image_url: http://example.com/photo.jpg
-                in_stock: true
-              - product_id: 4
-                name: Samsung Galaxy S10
-                description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
-                category: Phones
-                price: 112.99
-                image_url: http://example.com/photo.jpg
-                in_stock: true
-              - ...  
+                - product_id: 1
+                  name: Desi Avramovitz
+                  description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+                  category: clothing
+                  price: 112.99
+                  image_url: http://example.com/photo.jpg
+                  in_stock: true
+                - product_id: 4
+                  name: Samsung Galaxy S10
+                  description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+                  category: Phones
+                  price: 112.99
+                  image_url: http://example.com/photo.jpg
+                  in_stock: true
+                - ...
         401:
           description: "Authentication Error"
           example:
@@ -670,30 +675,60 @@ paths:
           description: "When a product is not in stock or does not exist"
           example:
             status: error
-            message: Product not found.
-        409:
-          description: Product is has been added to cart
-          example:
-            status: error
-            message: Product already in cart
-        422:
-          description: The provided input(s) are not supported
-          example:
-            errors:
-              -
-                msg: Provide an id
-                param: productId
-                location: body
-              - value: ""
-                msg: Id must be a positive integer not less than 1
-                param: productId
-                location: body
+            message: Product not found.   
         500:
           description: Internal server error
           example:
             status: error
             message: Internal server error
 
+    delete:
+      summary: "Handles the removal of a product from cart"
+      description: "This endpoint deletes a product from the carts while returning the remaining products"
+      tags:
+        - Cart
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: The unique identification number of the product
+      responses:
+        200:
+          description: Product has been successfully deleted from cart
+          example:
+            status: success
+            message: Product deleted
+            data:
+              cartId: 24
+              userId: 4
+              totalItems: 1
+              totalPrice: 112.99
+              products:
+                - product_id: 1
+                  name: Desi Avramovitz
+                  description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+                  category: clothing
+                  price: 112.99
+                  image_url: http://example.com/photo.jpg
+                  in_stock: true
+        401:
+          description: "Authentication Error"
+          example:
+            status: error
+            message: JsonWebTokenError
+        404:
+          description: "When a product is not in stock or not in cart"
+          example:
+            status: error
+            message: Product not in cart.
+        500:
+          description: Internal server error
+          example:
+            status: error
+            message: Internal server error
 
 
 definitions:
