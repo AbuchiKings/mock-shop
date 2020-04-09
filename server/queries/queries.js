@@ -63,7 +63,6 @@ const queries = {
   },
 
   updateProduct(id, product) {
-    console.log(product)
     return ({
       text: `UPDATE products SET
             name = COALESCE($1, name),

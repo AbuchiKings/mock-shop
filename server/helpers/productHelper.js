@@ -52,12 +52,10 @@ class ProductHelper {
       if (productData.rowCount < 1) {
         errorHandler(404, 'Product not found');
       }
-      const entries = Object.entries(product);
 
       const updatedProduct = await pool.query(query.updateProduct(id, product));
       return updatedProduct.rows[0];
     } catch (error) {
-      console.log(error)
       return error;
     }
   }

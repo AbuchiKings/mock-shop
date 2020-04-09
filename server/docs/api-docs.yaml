@@ -69,6 +69,7 @@ paths:
                 msg: A valid email must be provided
                 param: email
                 location: body
+              - ...  
 
         500:
           description: "Internal server error"
@@ -120,6 +121,11 @@ paths:
                 msg: First name and last name must have a minimun of three(3) letters
                 param: firstName
                 location: body
+              - value: ch
+                msg: Invalid email address
+                param: email
+                location: body
+              - ... 
         500:
           description: Internal server error
           example:
@@ -190,6 +196,7 @@ paths:
                 msg: Id must be a positive integer not less than 1
                 param: id
                 location: params
+              - ... 
         500:
           description: Internal server error
           example:
@@ -253,6 +260,7 @@ paths:
                 msg: Id must be a positive integer not less than 1
                 param: id
                 location: params
+              - ...  
         500:
           description: Internal server error
           example:
@@ -319,6 +327,7 @@ paths:
                 msg: Product image should contain a valid url
                 param: imageUrl
                 location: body
+              - ...  
         500:
           description: Internal server error
           example:
@@ -372,9 +381,9 @@ paths:
             message: Internal server error
 
   /products/{id}:
-    post:
+    patch:
       summary: "Handles the update of a  product"
-      description: "This endpoint creates a new product and persist it to the database"
+      description: "This endpoint updates a product and persist it to the database"
       tags:
         - Products
       consumes:
@@ -396,11 +405,11 @@ paths:
           schema:
             $ref: "#/definitions/UpateProductRequest"
       responses:
-        201:
-          description: Product has been successfully created
+        200:
+          description: Product has been successfully updated
           example:
             status: success
-            message: Product created successfully
+            message: Product updated successfully
             data:
               product_id: 1
               name: Desi Avramovitz
@@ -415,12 +424,12 @@ paths:
             status: error
             message: JsonWebTokenError
         403:
-          description: "When a non admin tries to create a new product"
+          description: "When a non admin tries to update a product"
           example:
             status: error
             message: Unauthorized Access. For admins/owner accounts only
         409:
-          description: Product already exists in database
+          description: Product name already exists in database
           example:
             status: error
             message: The provided product name already exists
@@ -436,6 +445,104 @@ paths:
                 msg: Product image should contain a valid url
                 param: imageUrl
                 location: body
+              - ...
+        500:
+          description: Internal server error
+          example:
+            status: error
+            message: Internal server error
+
+    get:
+      summary: "Retrieves a product"
+      description: "This endpoint retrieves a product from the database"
+      tags:
+        - Products
+      produces:
+        - application/json
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Product unique identification number
+      responses:
+        200:
+          description: Product have been successfully retrieved
+          example:
+            status: success
+            message: Success!
+            data:
+              product_id: 1
+              name: Desi Avramovitz
+              description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+              category: clothing
+              price: 50.45
+              image_url: http://example.com/photo.jpg
+              in_stock: true
+
+        401:
+          description: "Authentication Error"
+          example:
+            status: error
+            message: JsonWebTokenError
+        404:
+          description: "Product not in the database"
+          example:
+            status: error
+            message: Product not found
+        500:
+          description: Internal server error
+          example:
+            status: error
+            message: Internal server error
+
+    delete:
+      summary: "Deletes a product"
+      description: "This endpoint deletes a product from the database"
+      tags:
+        - Products
+      produces:
+        - application/json
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Product unique identification number
+      responses:
+        200:
+          description: Product have been successfully retrieved
+          example:
+            status: success
+            message: Success!
+            data:
+              product_id: 1
+              name: Desi Avramovitz
+              description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+              category: clothing
+              price: 50.45
+              image_url: http://example.com/photo.jpg
+              in_stock: true
+
+        401:
+          description: "Authentication Error"
+          example:
+            status: error
+            message: JsonWebTokenError
+        403:
+          description: "When a non admin tries to delete a product"
+          example:
+            status: error
+            message: Unauthorized Access. For admins/owner accounts only    
+        404:
+          description: "Product not in the database"
+          example:
+            status: error
+            message: Product not found
         500:
           description: Internal server error
           example:
@@ -532,5 +639,35 @@ definitions:
       price: 112.99
       imageUrl: http://example.com/photo.jpg
       inStock: true
+    required:
+      - name, description, category, price, imageUrl, inStock
+
+  UpateProductRequest:
+    title: "Admin update product request"
+    type: object
+    properties:
+      name:
+        description: "The name of the product"
+        type: string
+      description:
+        description: "Product description"
+        type: string
+      category:
+        description: "The product's category"
+        type: string
+      price:
+        description: "The price of the product"
+        type: float
+      imageUrl:
+        description: "The url to image of the product"
+        type: string
+      inStock:
+        description: "Product's availability status"
+        type: boolean
+    example:
+      category: Electronics
+      price: 110.99
+      imageUrl: http://ext.com/photo.jpg
+      inStock: false
     required:
       - name, description, category, price, imageUrl, inStock
