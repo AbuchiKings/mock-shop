@@ -6,7 +6,7 @@ info:
 
 schemes:
   - https
-host: https://abuchikings-mockshop.herokuapp.com
+host: abuchikings-mockshop.herokuapp.com
 basePath: "/api/v1"
 
 securityDefinitions:
@@ -746,7 +746,8 @@ definitions:
       email: example@mockshop.com
       password: example
     required:
-      - email, password
+      - email
+      - password
 
   UserSignUprequest:
     title: "User Sign Up Request"
@@ -774,7 +775,11 @@ definitions:
       password: user1234
       isAdmin: false
     required:
-      - firstName, lastName, email, password, isAdmin
+      - firstName
+      - lastName
+      - email
+      - password
+      - isAdmin
 
   UserUpdatePasswordRequest:
     title: "User Update Password  Request"
@@ -790,7 +795,8 @@ definitions:
       oldPassword: useri3/1
       newPassword: 413pass
     required:
-      - oldPassword, newPassword
+      - oldPassword
+      - newPassword
 
   CreateProductRequest:
     title: "Admin create new product request"
@@ -822,7 +828,12 @@ definitions:
       imageUrl: http://example.com/photo.jpg
       inStock: true
     required:
-      - name, description, category, price, imageUrl, inStock
+      - name
+      - description
+      - category
+      - price
+      - imageUrl
+      - inStock
 
   UpateProductRequest:
     title: "Admin update product request"
