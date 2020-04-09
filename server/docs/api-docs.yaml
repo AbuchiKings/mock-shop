@@ -1,10 +1,536 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
-  version: '1.0'
+  version: "1.0"
   title: Mock Shop
-  description: 'Mock Shop is a web application where users can shop for commodities.'
+  description: "Mock Shop is a web application where users can shop for commodities."
 
 schemes:
   - https
-host: 
-basePath: '/api/v1'
+host: https://abuchikings-mockshop.herokuapp.com
+basePath: "/api/v1"
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+
+tags:
+  - name: "Authentication"
+
+  - name: "User"
+
+  - name: "Cart"
+
+  - name: "Products"
+
+paths:
+  /auth/login:
+    post:
+      summary: "This endpoint authenticates the user."
+      description: "This authenticates the user and generates a jwt token for the user which would be needed to access other protected resource."
+      tags:
+        - Authentication
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          description: This is the request body object containing user's login information
+          schema:
+            $ref: "#/definitions/UserLoginrequest"
+      responses:
+        200:
+          description: User has been logged in successfully
+          example:
+            status: success,
+            message: Login successfull,
+            data:
+              token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....,
+              isAdmin: true
+        401:
+          description: User could not be authenticated
+          example:
+            status: error
+            message: Password is incorrect
+        404:
+          description: "User account found in the database"
+          example:
+            status: error
+            message: Account not found
+        422:
+          description: "User has entered unprocessable input"
+          example:
+            errors:
+              - value: email.com
+                msg: A valid email must be provided
+                param: email
+                location: body
+
+        500:
+          description: "Internal server error"
+          example:
+            status: error
+            message: Internal server error
+
+  /auth/signup:
+    post:
+      summary: "Handles the creation of a new user account"
+      description: "This endpoint creates a new user and persist the information to the database"
+      tags:
+        - Authentication
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          description: "This is the request body object containing user's signup information"
+          schema:
+            $ref: "#/definitions/UserSignUprequest"
+      responses:
+        201:
+          description: User has been successfully registered
+          example:
+            status: success
+            message: User created successfully
+            data:
+              id: 3
+              first_name: John
+              last_name: Doe
+              email: johndoe@email.com
+              password: $2b$10$fzoxx7RSXxSE1Fln0CG6o.nM3mvrHnSbdGYY2j2nwY0i...
+              is_admin: false
+              registered: 2020-04-08T00:00:00.000Z
+        409:
+          description: Email already exists in database
+          example:
+            status: error
+            message: Email address is already in use
+        422:
+          description: The provided input(s) are not supported
+          example:
+            errors:
+              - value: ch
+                msg: First name and last name must have a minimun of three(3) letters
+                param: firstName
+                location: body
+        500:
+          description: Internal server error
+          example:
+            status: error
+            message: Internal server error
+
+  /users/update-password/{id}:
+    patch:
+      summary: "Handles the update of user password"
+      description: "This endpoint changes the password of a user and persists the information to the database"
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: User unique identification number
+
+        - in: body
+          name: body
+          required: true
+          description: "This is the request body object containing user's  old and new password"
+          schema:
+            $ref: "#/definitions/UserUpdatePasswordRequest"
+      responses:
+        200:
+          description: "Password was successfully updated"
+          example:
+            status: success
+            message: Password updated successfully
+            data:
+              token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....
+              user:
+                - id: 3
+                  first_name: John
+                  last_name: Doe
+                  email: johndoe@email.com
+                  password: $2b$10$fzoxx7RSXxSE1Fln0CG6o.nM3mvrHnSbdGYY2j2nwY0i...
+                  is_admin: false
+                  registered: 2020-04-08T00:00:00.000Z
+        401:
+          description: "Authentication Error"
+          example:
+            status: error
+            message: Headers not set
+        404:
+          description: "User account not found in database"
+          example:
+            status: error
+            message: Account not found
+        409:
+          description: "Old password and new password are the same"
+          example:
+            status: error
+            message: Old password and New password cannot be the same
+        422:
+          description: "The provided input(s) are not supported"
+          example:
+            errors:
+              - value: "er"
+                msg: Id must be a positive integer not less than 1
+                param: id
+                location: params
+        500:
+          description: Internal server error
+          example:
+            status: error
+            message: Internal server error
+
+  /users/{id}:
+    delete:
+      summary: "Handles the delete of a user"
+      description: "This endpoint removes a user's information permanently from the database"
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: User unique identification number
+      responses:
+        200:
+          description: "Password was successfully updated"
+          example:
+            status: success
+            message: User deleted successfully
+            data:
+              token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....
+              user:
+                - id: 3
+                  first_name: John
+                  last_name: Doe
+                  email: johndoe@email.com
+                  password: $2b$10$fzoxx7RSXxSE1Fln0CG6o.nM3mvrHnSbdGYY2j2nwY0i...
+                  is_admin: false
+                  registered: 2020-04-08T00:00:00.000Z
+        401:
+          description: "Authentication Error"
+          example:
+            status: error
+            message: JsonWebTokenError
+        403:
+          description: "Path parameter and userid mismatch"
+          example:
+            status: error
+            message: Unauthorised to delete user
+        404:
+          description: "User account not found in database"
+          example:
+            status: error
+            message: Account not found
+        422:
+          description: "Invalid id parameter value"
+          example:
+            errors:
+              - value: "er"
+                msg: Id must be a positive integer not less than 1
+                param: id
+                location: params
+        500:
+          description: Internal server error
+          example:
+            status: error
+            message: Internal server error
+
+  /products:
+    post:
+      summary: "Handles the creation of a new product"
+      description: "This endpoint creates a new product and persist it to the database"
+      tags:
+        - Products
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - Bearer: []
+      parameters:
+        - in: body
+          name: body
+          required: true
+          description: "This is the request body object containing new product's details"
+          schema:
+            $ref: "#/definitions/CreateProductRequest"
+      responses:
+        201:
+          description: Product has been successfully created
+          example:
+            status: success
+            message: Product created successfully
+            data:
+              product_id: 1
+              name: Desi Avramovitz
+              description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+              category: clothing
+              price: 50.45
+              image_url: http://example.com/photo.jpg
+              in_stock: true
+        401:
+          description: "Authentication Error"
+          example:
+            status: error
+            message: JsonWebTokenError
+        403:
+          description: "When a non admin tries to create a new product"
+          example:
+            status: error
+            message: Unauthorized Access. For admins/owner accounts only
+        409:
+          description: Product already exists in database
+          example:
+            status: error
+            message: The provided product name already exists
+        422:
+          description: The provided input(s) are not supported
+          example:
+            errors:
+              - value: ""
+                msg: Product's category must have a minimum of 2 letters
+                param: category
+                location: body
+              - value: http://examplecom/photo.jpg
+                msg: Product image should contain a valid url
+                param: imageUrl
+                location: body
+        500:
+          description: Internal server error
+          example:
+            status: error
+            message: Internal server error
+
+    get:
+      summary: "Retrieves all products"
+      description: "This endpoint retrieves all products from the database"
+      tags:
+        - Products
+      produces:
+        - application/json
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: All products have been successfully retrieved
+          example:
+            status: success
+            message: Success!
+            data:
+              - product_id: 1
+                name: Desi Avramovitz
+                description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+                category: clothing
+                price: 50.45
+                image_url: http://example.com/photo.jpg
+                in_stock: true
+              - product_id: 2
+                name: Samsung Galaxy S6
+                description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+                category: Electronics
+                price: 40.15
+                image_url: http://example.com/photo.jpg
+                in_stock: false
+        401:
+          description: "Authentication Error"
+          example:
+            status: error
+            message: JsonWebTokenError
+        404:
+          description: "No products in the database"
+          example:
+            status: error
+            message: No product found
+        500:
+          description: Internal server error
+          example:
+            status: error
+            message: Internal server error
+
+  /products/{id}:
+    post:
+      summary: "Handles the update of a  product"
+      description: "This endpoint creates a new product and persist it to the database"
+      tags:
+        - Products
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Unique product id
+        - in: body
+          name: body
+          required: true
+          description: "This is the request body object containing update details"
+          schema:
+            $ref: "#/definitions/UpateProductRequest"
+      responses:
+        201:
+          description: Product has been successfully created
+          example:
+            status: success
+            message: Product created successfully
+            data:
+              product_id: 1
+              name: Desi Avramovitz
+              description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+              category: clothing
+              price: 50.45
+              image_url: http://example.com/photo.jpg
+              in_stock: true
+        401:
+          description: "Authentication Error"
+          example:
+            status: error
+            message: JsonWebTokenError
+        403:
+          description: "When a non admin tries to create a new product"
+          example:
+            status: error
+            message: Unauthorized Access. For admins/owner accounts only
+        409:
+          description: Product already exists in database
+          example:
+            status: error
+            message: The provided product name already exists
+        422:
+          description: The provided input(s) are not supported
+          example:
+            errors:
+              - value: ""
+                msg: Product's category must have a minimum of 2 letters
+                param: category
+                location: body
+              - value: http://examplecom/photo.jpg
+                msg: Product image should contain a valid url
+                param: imageUrl
+                location: body
+        500:
+          description: Internal server error
+          example:
+            status: error
+            message: Internal server error
+
+definitions:
+  UserLoginrequest:
+    title: "User Login Request"
+    type: object
+    properties:
+      email:
+        description: "The email address of the user"
+        type: string
+      password:
+        description: "The Password of the user"
+        type: string
+    example:
+      email: example@mockshop.com
+      password: example
+    required:
+      - email, password
+
+  UserSignUprequest:
+    title: "User Sign Up Request"
+    type: object
+    properties:
+      firstName:
+        description: "The first name of the user"
+        type: string
+      lastName:
+        description: "The last name of the user"
+        type: string
+      email:
+        description: "The email address of the user"
+        type: string
+      password:
+        description: "The password of the user"
+        type: string
+      isAdmin:
+        description: "The user admin status"
+        type: boolean
+    example:
+      firstName: John
+      lasttName: Doe
+      email: john.doe@mockshop.com
+      password: user1234
+      isAdmin: false
+    required:
+      - firstName, lastName, email, password, isAdmin
+
+  UserUpdatePasswordRequest:
+    title: "User Update Password  Request"
+    type: object
+    properties:
+      oldPassword:
+        description: "The current password of the user"
+        type: string
+      newPassword:
+        description: "The new password of the user"
+        type: string
+    example:
+      oldPassword: useri3/1
+      newPassword: 413pass
+    required:
+      - oldPassword, newPassword
+
+  CreateProductRequest:
+    title: "Admin create new product request"
+    type: object
+    properties:
+      name:
+        description: "The name of the product"
+        type: string
+      description:
+        description: "Product description"
+        type: string
+      category:
+        description: "The product's category"
+        type: string
+      price:
+        description: "The price of the product"
+        type: float
+      imageUrl:
+        description: "The url to image of the product"
+        type: string
+      inStock:
+        description: "Product's availability status"
+        type: boolean
+    example:
+      name: LG G5
+      description: Etiam vel augue. Vestibulum rutrum rutrum neque
+      category: Electronics
+      price: 112.99
+      imageUrl: http://example.com/photo.jpg
+      inStock: true
+    required:
+      - name, description, category, price, imageUrl, inStock

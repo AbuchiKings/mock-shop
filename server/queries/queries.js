@@ -63,14 +63,16 @@ const queries = {
   },
 
   updateProduct(id, product) {
+    console.log(product)
     return ({
       text: `UPDATE products SET
             name = COALESCE($1, name),
             description = COALESCE($2, description),
             category = COALESCE($3, category),
             price = COALESCE($4, price),
-            image_url = COALESCE($5, image_url)
-            WHERE product_id = $6
+            image_url = COALESCE($5, image_url),
+            in_stock = COALESCE($6, in_stock)
+            WHERE product_id = $7
             RETURNING *`,
       values: [
         product.name,
@@ -78,6 +80,7 @@ const queries = {
         product.category,
         product.price,
         product.imageUrl,
+        product.inStock,
         id
       ]
     });

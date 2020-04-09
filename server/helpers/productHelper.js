@@ -31,17 +31,20 @@ class ProductHelper {
   static async updateProduct(req) {
     try {
       const allProducts = await pool.query(query.getAllProducts());
+
       const isExists = req.body.name ? allProducts.rows.some((product) => product.name === req.body.name) : false;
 
       if (isExists) {
         errorHandler(409, 'The provided product name already exists.');
       }
+
       let { id } = req.params;
-      let product = request.body;
+      let product = req.body;
+
       let price;
-      if (req.body.price !== undefined) {
+      if (product.price) {
         price = parseFloat(req.body.price, 10).toFixed(2);
-        product = { ...req.body, price };
+        product = { ...product, price };
       }
 
       id = parseInt(id, 10);
@@ -49,9 +52,12 @@ class ProductHelper {
       if (productData.rowCount < 1) {
         errorHandler(404, 'Product not found');
       }
+      const entries = Object.entries(product);
+
       const updatedProduct = await pool.query(query.updateProduct(id, product));
       return updatedProduct.rows[0];
     } catch (error) {
+      console.log(error)
       return error;
     }
   }

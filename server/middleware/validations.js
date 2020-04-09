@@ -6,7 +6,7 @@ import {
 const validateLogin = [
   body('email')
     .exists()
-    .withMessage('A valid email must be provided.')
+    .withMessage('A valid email must be provided')
     .normalizeEmail({ all_lowercase: true })
     .isEmail()
     .withMessage('Invalid email address'),
@@ -144,12 +144,20 @@ const validateNewProduct = [
   body('imageUrl')
     .exists()
     .withMessage('Product\'s image must be provided')
+    .isURL()
+    .withMessage('Product image should contain a valid url')
     .custom((imageUrl) => {
       const checkUrl = /(http(s?):(\/){2})([^/])([/.\w\s-])*\.(?:jpg|gif|png)/g;
       return checkUrl.test(imageUrl);
     })
-    .withMessage('Product image input should be a valid image url')
+    .withMessage('Product image should be a valid image url'),
 
+
+  body('inStock')
+    .exists()
+    .withMessage('Product\'s availability status muct be provided')
+    .isBoolean()
+    .withMessage('inStock should be a boolean')
 ];
 
 const validateProductUpdate = [
@@ -158,7 +166,8 @@ const validateProductUpdate = [
   validateNewProduct[1].optional(),
   validateNewProduct[2].optional(),
   validateNewProduct[3].optional(),
-  validateNewProduct[4].optional()
+  validateNewProduct[4].optional(),
+  validateNewProduct[5].optional()
 ];
 
 const validateAddToCart = [

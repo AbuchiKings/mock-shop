@@ -22,6 +22,7 @@ router.patch('/products/:id',
 router.get('/products',
   auth.verifyToken,
   ProductController.getAllProducts);
+  
 router.get('/products/:id',
   auth.verifyToken,
   validator.validateId,

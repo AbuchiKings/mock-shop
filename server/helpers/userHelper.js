@@ -39,7 +39,7 @@ class UserHelper {
 
       const foundUser = await pool.query(query.getUserByEmail(email));
 
-      if (foundUser.rowCount < 1) errorHandler(404, 'Email address is incorrect');
+      if (foundUser.rowCount < 1) errorHandler(404, 'Account not found');
 
       const isValidPassword = await bcrypt.compare(password, foundUser.rows[0].password);
 

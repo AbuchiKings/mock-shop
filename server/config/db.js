@@ -35,7 +35,7 @@ const products = `CREATE TABLE IF NOT EXISTS products (
     category TEXT NOT NULL,
     price FLOAT NOT NULL,
     image_url TEXT NOT NULL,
-    in_stock BOOLEAN DEFAULT true
+    in_stock BOOLEAN DEFAULT false
 );`;
 
 const carts = `CREATE TABLE IF NOT EXISTS carts (
