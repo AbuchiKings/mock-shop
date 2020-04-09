@@ -24,7 +24,7 @@ class CartHelper {
           }
 
           if ((userCart).rows[0].products_id.length >= 12) {
-            return errorHandler(400, 'Maximum cart capacity reached');
+            return errorHandler(400, 'Maximum cart capacity reached. Please check out.');
           }
 
           const isExists = userCart.rows[0].products_id.some((id) => (

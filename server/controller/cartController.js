@@ -10,7 +10,7 @@ class CartController {
 
   static async getCart(req, res, next) {
     const result = await CartHelper.getCart(req);
-    responseHandler(res, result, next, 200, 'Success');
+    responseHandler(res, result, next, 200, 'Success!');
   }
 
   static async deleteCartItem(req, res, next) {

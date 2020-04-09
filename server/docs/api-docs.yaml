@@ -515,10 +515,10 @@ paths:
           description: Product unique identification number
       responses:
         200:
-          description: Product have been successfully retrieved
+          description: Product have been successfully deleted
           example:
             status: success
-            message: Success!
+            message: Product deleted successfully
             data:
               product_id: 1
               name: Desi Avramovitz
@@ -548,6 +548,153 @@ paths:
           example:
             status: error
             message: Internal server error
+
+  /cart:
+    put:
+      summary: "Handles the addtion of a  product to cart"
+      description: "This endpoint adds a product to the cart and persist it to the database"
+      tags:
+        - Cart
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - Bearer: []
+      parameters:
+        - in: body
+          name: body
+          required: true
+          description: "This is the request body object containing the productId"
+          schema:
+            $ref: "#/definitions/AddProductToCartRequest"
+      responses:
+        200:
+          description: Product has been successfully added to cart
+          example:
+            status: success
+            message: Product added to cart
+            data:
+              cartId: 24
+              userId: 4
+              totalItems: 1
+              totalPrice: 112.99
+              products:
+              - product_id: 1
+                name: Desi Avramovitz
+                description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+                category: clothing
+                price: 112.99
+                image_url: http://example.com/photo.jpg
+                in_stock: true
+        400:
+          description: "When cart is full"
+          example:
+            status: error
+            message: Maximum cart capacity reached. Please check out.
+        401:
+          description: "Authentication Error"
+          example:
+            status: error
+            message: JsonWebTokenError
+        404:
+          description: "When a product is not in stock or does not exist"
+          example:
+            status: error
+            message: Product not found.
+        409:
+          description: Product is has been added to cart
+          example:
+            status: error
+            message: Product already in cart
+        422:
+          description: The provided input(s) are not supported
+          example:
+            errors:
+              -
+                msg: Provide an id
+                param: productId
+                location: body
+              - value: ""
+                msg: Id must be a positive integer not less than 1
+                param: productId
+                location: body
+        500:
+          description: Internal server error
+          example:
+            status: error
+            message: Internal server error
+
+    get:
+      summary: "Handles cart retrieval"
+      description: "Returns products in cart"
+      tags:
+        - Cart
+      produces:
+        - application/json
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Cart has been successfully retrieved
+          example:
+            status: success
+            message: Success!
+            data:
+              cartId: 24
+              userId: 4
+              totalItems: 1
+              totalPrice: 225.98
+              products:
+              - product_id: 1
+                name: Desi Avramovitz
+                description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+                category: clothing
+                price: 112.99
+                image_url: http://example.com/photo.jpg
+                in_stock: true
+              - product_id: 4
+                name: Samsung Galaxy S10
+                description: Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.
+                category: Phones
+                price: 112.99
+                image_url: http://example.com/photo.jpg
+                in_stock: true
+              - ...  
+        401:
+          description: "Authentication Error"
+          example:
+            status: error
+            message: JsonWebTokenError
+        404:
+          description: "When a product is not in stock or does not exist"
+          example:
+            status: error
+            message: Product not found.
+        409:
+          description: Product is has been added to cart
+          example:
+            status: error
+            message: Product already in cart
+        422:
+          description: The provided input(s) are not supported
+          example:
+            errors:
+              -
+                msg: Provide an id
+                param: productId
+                location: body
+              - value: ""
+                msg: Id must be a positive integer not less than 1
+                param: productId
+                location: body
+        500:
+          description: Internal server error
+          example:
+            status: error
+            message: Internal server error
+
+
 
 definitions:
   UserLoginrequest:
@@ -671,3 +818,15 @@ definitions:
       inStock: false
     required:
       - name, description, category, price, imageUrl, inStock
+
+  AddProductToCartRequest:
+    title: "Add a product to cart"
+    type: object
+    properties:
+      productId:
+        description: "The unique identification number of the product"
+        type: integer
+    example:
+      productId: 6
+    required:
+      - productId
