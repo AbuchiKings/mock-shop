@@ -638,7 +638,7 @@ paths:
           name: id
           type: integer
           required: true
-          description: The unique identification number of the product  
+          description: The unique identification number of the cart  
       responses:
         200:
           description: Cart has been successfully retrieved
