@@ -5,7 +5,9 @@ import CartHelper from '../helpers/cartHelper';
 class CartController {
   static async addToCart(req, res, next) {
     const result = await CartHelper.addToCart(req, res, next);
+    console.log(result)
     responseHandler(res, result, next, 200, 'Product added to cart');
+
   }
 
   static async getCart(req, res, next) {
